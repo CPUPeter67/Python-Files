@@ -26,6 +26,10 @@ def show_status(player_name, inventory, suspense_level):
     print()
 
 
+def should_welcome_back(input_name, saved_name):
+    return input_name.strip().lower() == saved_name.strip().lower()
+
+
 # slow_print function is defined here to create the typing effect.
 def slow_print(text, speed=0.06):
     for char in text:
@@ -252,12 +256,16 @@ def main():
     saved_data = load_game()
     if saved_data is not None:
         saved_name, saved_chapter = saved_data
-        slow_print(f"Welcome back, {saved_name}!")
-        print()
+        if should_welcome_back(player_name, saved_name):
+            slow_print(f"Welcome back, {saved_name}!")
+            print()
+        else:
+            slow_print(f"Starting a new adventure for {player_name}.")
+            print()
         slow_print(f"Resume from {saved_chapter}? (y/n): ")
         resume = input(">> ")
         if resume.lower() == 'y':
-            player_name = saved_name
+            player_name = saved_name if should_welcome_back(player_name, saved_name) else player_name
             if saved_chapter == "Chapter 2":
                 chapter_2(player_name, inventory, suspense_level)
                 return
