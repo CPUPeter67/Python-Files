@@ -2,6 +2,31 @@ import sys
 import time
 
 
+MAX_SUSPENSE_LEVEL = 5
+
+
+def add_item_to_inventory(inventory, item):
+    if item not in inventory:
+        inventory.append(item)
+    return inventory
+
+
+def update_suspense_level(current_level, action):
+    if action == "raise":
+        return min(current_level + 1, MAX_SUSPENSE_LEVEL)
+    if action == "lower":
+        return max(current_level - 1, 0)
+    return current_level
+
+
+def show_status(player_name, inventory, suspense_level):
+    slow_print(f"{player_name}'s status")
+    slow_print(f"Inventory: {', '.join(inventory) if inventory else 'empty'}")
+    slow_print(f"Suspense: {'█' * suspense_level}{'░' * (MAX_SUSPENSE_LEVEL - suspense_level)}")
+    print()
+
+
+# slow_print function is defined here to create the typing effect.
 def slow_print(text, speed=0.06):
     for char in text:
         sys.stdout.write(char)
@@ -9,14 +34,14 @@ def slow_print(text, speed=0.06):
         time.sleep(speed)
     print()
 
-
+# This allows the user to save their progress
 def save_game(player_name, chapter_name):
     with open("save_data.txt", "w") as file:
         file.write(player_name + "\n")
         file.write(chapter_name + "\n")
-    print("\n[ Progress saved automatically ]\n")
+    slow_print("\n[ Progress saved automatically ]\n")
 
-
+# Allows the user to load in their saved game.
 def load_game():
     try:
         with open("save_data.txt", "r") as file:
@@ -26,13 +51,15 @@ def load_game():
                 chapter = lines[1].strip()
                 return name, chapter
     except FileNotFoundError:
-        # If the file doesn't exist yet (first time playing), return None
+        # If the file doesn't exist yet (first time playing), return None.
         return None    
 
-
-def porch(player_name):
+# Porch function is defined here as a key part in the program.
+def porch(player_name, inventory, suspense_level):
     slow_print("You walk to your front porch and see a package sitting there. It's pretty big, but it has no return address. You pick it up and notice a note attached to it.")
     slow_print("The note reads: Dear " + player_name + ",\n\nInside this package, you will find the tools and instructions you need to participate. Remember, time is of the essence. Good luck, agent.\n\n- The Anomaly")
+    inventory = add_item_to_inventory(inventory, "mysterious package")
+    suspense_level = update_suspense_level(suspense_level, "raise")
     print()
     slow_print("Take the package inside? (y/n): ")
     take_package = input()
@@ -40,6 +67,11 @@ def porch(player_name):
 
     if take_package.lower() == 'y':
         slow_print("You bring the package along with you and place it on the kitchen counter. You open it and find a pair of glasses, a pen, and a sort of book.")
+        inventory = add_item_to_inventory(inventory, "glasses")
+        inventory = add_item_to_inventory(inventory, "mysterious pen")
+        inventory = add_item_to_inventory(inventory, "lab notebook")
+        suspense_level = update_suspense_level(suspense_level, "raise")
+        show_status(player_name, inventory, suspense_level)
         slow_print("You: Looks pretty normal. I wonder what these are for...")
         slow_print("There is another note inside the box. It reads: \"This box contains all the lab equipment you need. The pen has a vial of a deadly neurotoxin inside it. You will be the first one to be testing it. You will have a specialized databook you will use to record results. I have also included the address of the area that you will be working in. It is highly secretive, so do not forget it. You have been given the sum of $1,000. You will be paid more later.\"")
         print()
@@ -59,13 +91,15 @@ def porch(player_name):
         slow_print("Proceed to Chapter 2? (y/n)", speed=0.07)
         chapter_2_proceed = input()
         if chapter_2_proceed.lower() == 'y':
-            chapter_2(player_name)
+            return chapter_2(player_name, inventory, suspense_level)
         else:
             slow_print("You decide to take a break and relax for a while. You will be back where you started.")    
             sys.exit()
 
+    return inventory, suspense_level
 
-def chapter_2(player_name):
+# Chapter 2 events.
+def chapter_2(player_name, inventory, suspense_level):
     print()
     slow_print("7:16 AM. Papa John's Diner, Palm Beach, Florida.")
     print()
@@ -75,14 +109,17 @@ def chapter_2(player_name):
     time.sleep(1)
     slow_print("Check it out? (y/n)")
     building_exit = input(">> ")
-    diner(building_exit, player_name)
+    return diner(building_exit, player_name, inventory, suspense_level)
 
 
-def diner(building_exit, player_name):
+def diner(building_exit, player_name, inventory, suspense_level):
     if building_exit.lower() == 'y':
         slow_print("You pause your meal and exit through the back door.")
         print()
         slow_print("You see a shady figure leaning against the diner wall. He (or she) is wearing completely black clothing with a mask that covers their entire face. You can't see any of their features.")
+        suspense_level = update_suspense_level(suspense_level, "raise")
+        inventory = add_item_to_inventory(inventory, "shadowy clue")
+        show_status(player_name, inventory, suspense_level)
         print()
         time.sleep(1.5)
        
@@ -112,7 +149,7 @@ def diner(building_exit, player_name):
                 slow_print("You: I said, what do you want?")
                 time.sleep(1.5)
                 slow_print("*Silence*")
-                proceeding_events_chapter_2(player_name)    
+                return proceeding_events_chapter_2(player_name, inventory, suspense_level)
 
 
             elif choice == "2":
@@ -132,7 +169,7 @@ def diner(building_exit, player_name):
         sys.exit()
 
 
-def proceeding_events_chapter_2(player_name):
+def proceeding_events_chapter_2(player_name, inventory, suspense_level):
     time.sleep(1.5)
     slow_print("Choose what you say (or do):", speed=0.05)
     print("[1] \"Are you even alive?!\"")
@@ -147,6 +184,9 @@ def proceeding_events_chapter_2(player_name):
         slow_print("You: Are you even alive?!")
         time.sleep(2)
         slow_print("???: You don't talk to the Anomaly that way.")
+        suspense_level = update_suspense_level(suspense_level, "raise")
+        inventory = add_item_to_inventory(inventory, "strange note")
+        show_status(player_name, inventory, suspense_level)
         slow_print("Choose what you say (or do):", speed=0.05)
         print("[1] \"Say what?\"")
         print("[2] \"Whatever. I don't care.\"")
@@ -162,13 +202,14 @@ def proceeding_events_chapter_2(player_name):
             time.sleep(1.5)
             save_game(player_name, "Chapter 3")
             slow_print("Chapter 3 is coming soon!", speed=0.07)
-            sys.exit()
+            return inventory, suspense_level
            
         elif choice == "2":
             slow_print("You: Whatever. I don't care.")
             time.sleep(1)
-            slow_print("The figure lunges at you, but you dodge the attack. You run back to your car and lock the doors. The figure doesn't follow you. It just watches as you call the police.")    
-            sys.exit()
+            slow_print("The figure lunges at you, but you dodge the attack. You run back to your car and lock the doors. The figure doesn't follow you. It just watches as you call the police.")
+            suspense_level = update_suspense_level(suspense_level, "lower")
+            return inventory, suspense_level
 
 
     elif choice == "2":
@@ -184,13 +225,16 @@ def proceeding_events_chapter_2(player_name):
         time.sleep(1.5)
         save_game(player_name, "Chapter 3")
         slow_print("Chapter 3 is coming soon!", speed=0.07)
-        sys.exit()
+        return inventory, suspense_level
        
     elif choice == "3":
         slow_print("You: I don't have time for this. I'm going inside.")
         time.sleep(1)
         slow_print("The figure doesn't respond. You go back into the diner and continue your breakfast.")
-        sys.exit()    
+        suspense_level = update_suspense_level(suspense_level, "lower")
+        return inventory, suspense_level
+
+    return inventory, suspense_level
 
 
 
@@ -200,6 +244,8 @@ def proceeding_events_chapter_2(player_name):
 def main():
     slow_print("Before the project is begun, enter your name:")
     player_name = input(">> ")
+    inventory = []
+    suspense_level = 0
     print()
     
     # Check if there's a saved game
@@ -213,11 +259,11 @@ def main():
         if resume.lower() == 'y':
             player_name = saved_name
             if saved_chapter == "Chapter 2":
-                chapter_2(player_name)
+                chapter_2(player_name, inventory, suspense_level)
                 return
             elif saved_chapter == "Chapter 3":
                 slow_print("Chapter 3 is not yet available. Starting from Chapter 2.")
-                chapter_2(player_name)
+                chapter_2(player_name, inventory, suspense_level)
                 return
     
     # Start new game from the beginning
@@ -277,7 +323,7 @@ def main():
             slow_print("Check your porch? (y/n): ")
             check_porch = input(">> ")
             if check_porch.lower() == 'y':
-                porch(player_name)
+                inventory, suspense_level = porch(player_name, inventory, suspense_level)
             elif check_porch.lower() == 'n':
                 slow_print("Guess you weren't ready for this after all.")    
                 sys.exit()
