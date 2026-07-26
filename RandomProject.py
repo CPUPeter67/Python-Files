@@ -8,6 +8,8 @@ def slow_print(text, speed=0.06):
         sys.stdout.flush()
         time.sleep(speed)
     print()
+
+
 def save_game(player_name, chapter_name):
     with open("save_data.txt", "w") as file:
         file.write(player_name + "\n")
@@ -39,13 +41,13 @@ def porch(player_name):
     if take_package.lower() == 'y':
         slow_print("You bring the package along with you and place it on the kitchen counter. You open it and find a pair of glasses, a pen, and a sort of book.")
         slow_print("You: Looks pretty normal. I wonder what these are for...")
-        slow_print("There is another note inside the box. It reads: \"This box contains all the lab equipment you need. The pen has a vial of a deadly neurotoxin inside it. You will be the first one to be testing it. You will have a specialized databook you will use to record results. I have also included the address of the area that you will be working in. It is highly secretive, so do not forget it. You have been sent you the sum of $1,000. You will be paid more later.")
+        slow_print("There is another note inside the box. It reads: \"This box contains all the lab equipment you need. The pen has a vial of a deadly neurotoxin inside it. You will be the first one to be testing it. You will have a specialized databook you will use to record results. I have also included the address of the area that you will be working in. It is highly secretive, so do not forget it. You have been given the sum of $1,000. You will be paid more later.\"")
         print()
-        slow_print("You have been sent you the sum of $1,000. You will be paid more later.")
+        slow_print("You have been given the sum of $1,000. You will be paid more later.")
         print()
         slow_print("Good luck, " + player_name + "\"", speed=0.1)
         print()
-        slow_print("You: How does he even know my name!. And I'm not a killer! I wouldn't even be needing this!")
+        slow_print("You: How does he even know my name? And I'm not a killer! I wouldn't even be needing this!")
         print()
         slow_print("You fiddle with the pen for a while and discover that it can't even write. You pretty much stuff the pen in your pocket and shelve the rest, forgetting all about it.")
        
@@ -59,7 +61,7 @@ def porch(player_name):
         if chapter_2_proceed.lower() == 'y':
             chapter_2(player_name)
         else:
-            slow_print("You decide to take a break and relax for a while. You will not be back where you started.")    
+            slow_print("You decide to take a break and relax for a while. You will be back where you started.")    
             sys.exit()
 
 
@@ -72,7 +74,7 @@ def chapter_2(player_name):
     slow_print("You can't see the source of the noise.")
     time.sleep(1)
     slow_print("Check it out? (y/n)")
-    building_exit = input()
+    building_exit = input(">> ")
     diner(building_exit, player_name)
 
 
@@ -90,11 +92,11 @@ def diner(building_exit, player_name):
 
 
         slow_print("Your choice (1-2): ", speed=0.07)
-        choice = input()
+        choice = input(">> ")
 
 
         if choice == "1":
-            slow_print("You: What do you want? Your'e knocking recklessly!")
+            slow_print("You: What do you want? You're knocking recklessly!")
             time.sleep(1.5)
             print()
             slow_print("*Silence*")
