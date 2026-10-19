@@ -61,7 +61,7 @@ def load_game():
 # Porch function is defined here as a key part in the program.
 def porch(player_name, inventory, suspense_level):
     slow_print("You walk to your front porch and see a package sitting there. It's pretty big, but it has no return address. You pick it up and notice a note attached to it.")
-    slow_print("The note reads: Dear " + player_name + ",\n\nInside this package, you will find the tools and instructions you need to participate. Remember, time is of the essence. Good luck, agent.\n\n- The Anomaly")
+    slow_print("The note reads: Dear " + player_name + ",\n\nInside this package, you will find the tools and instructions you need to participate. Remember, time is of the essence. Good luck, doc.\n\n- The Anomaly")
     inventory = add_item_to_inventory(inventory, "mysterious package")
     suspense_level = update_suspense_level(suspense_level, "raise")
     print()
@@ -79,13 +79,13 @@ def porch(player_name, inventory, suspense_level):
         slow_print("You: Looks pretty normal. I wonder what these are for...")
         slow_print("There is another note inside the box. It reads: \"This box contains all the lab equipment you need. The pen has a vial of a deadly neurotoxin inside it. You will be the first one to be testing it. You will have a specialized databook you will use to record results. I have also included the address of the area that you will be working in. It is highly secretive, so do not forget it. You have been given the sum of $1,000. You will be paid more later.\"")
         print()
-        slow_print("You have been given the sum of $1,000. You will be paid more later.")
-        print()
         slow_print("Good luck, " + player_name + "\"", speed=0.1)
         print()
         slow_print("You: How does he even know my name? And I'm not a killer! I wouldn't even be needing this!")
         print()
         slow_print("You fiddle with the pen for a while and discover that it can't even write. You pretty much stuff the pen in your pocket and shelve the rest, forgetting all about it.")
+        time.sleep(1.5)
+        slow_print("Damn! A thousand dollars is a thousand dollars, though!")
        
         time.sleep(2.5)
        
